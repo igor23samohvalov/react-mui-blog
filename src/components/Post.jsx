@@ -30,9 +30,13 @@ function Post({ title, author, post, id, img }) {
   useEffect(() => {
     setCommentsNum(comments.length);
   }, [comments])
-  
+
   const handleRemove = () => {
     dispatch(postsActions.removePost(id));
+  
+    const posts = JSON.parse(localStorage.getItem('posts'));
+    const newPosts = posts.filter((p) => p.id !== id);
+    localStorage.setItem('posts', JSON.stringify(newPosts));
   };
   const handleExpandClick = (e) => {
     switch (e.target.id) {

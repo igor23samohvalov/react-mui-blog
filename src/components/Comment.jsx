@@ -16,6 +16,10 @@ function Comment({ author, commentText, id }) {
 
   const handleRemove = () => {
     dispatch(commentsActions.removeComment(id));
+
+    const comments = JSON.parse(localStorage.getItem('comments'));
+    const newComments = comments.filter((c) => c.id !== id);
+    localStorage.setItem('comments', JSON.stringify(newComments));
   };
 
   return (

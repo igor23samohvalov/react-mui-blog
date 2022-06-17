@@ -29,8 +29,19 @@ function AddComment({ postId, setAddComment, setComments }) {
   } = useForm();
 
   const onSubmit = (values) => {
-    dispatch(commentsActions.addComment({...values, id: lastCommentId + 1, postId}));
+    const newComment = { ...values, id: lastCommentId + 1, postId };
+  
+    dispatch(commentsActions.addComment(newComment));
     reset();
+
+    if (localStorage.getItem('comments')) {
+      const tempComments = JSON.parse(localStorage.getItem('comments'));
+      tempComments.push(newComment);
+      localStorage.setItem('comments', JSON.stringify(tempComments));
+    } else {
+      localStorage.setItem('comments', JSON.stringify([newComment]));
+    }
+    
     setAddComment(false);
     setComments(true);
   }

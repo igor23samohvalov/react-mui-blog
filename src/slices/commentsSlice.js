@@ -10,6 +10,7 @@ const commentsReducer = createSlice({
   initialState,
   reducers: {
     addComment: commentsAdapter.addOne,
+    addComments: commentsAdapter.addMany,
     removeComment: commentsAdapter.removeOne,
   },
   extraReducers: (builder) => {
