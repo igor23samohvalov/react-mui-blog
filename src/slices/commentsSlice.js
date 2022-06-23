@@ -1,6 +1,6 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { actions as postsActions } from './postsSlice.js';
-import { actions as authorsActions } from './authorSlices.js';
+import { actions as authorsActions } from './authorsSlice.js';
 
 const commentsAdapter = createEntityAdapter();
 const initialState = commentsAdapter.getInitialState();

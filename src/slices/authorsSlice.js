@@ -8,6 +8,7 @@ const authorsReducer = createSlice({
   initialState,
   reducers: {
     addAuthor: authorsAdapter.addOne,
+    addAuthors: authorsAdapter.addMany,
     removeAuthor: authorsAdapter.removeOne,
   }
 });

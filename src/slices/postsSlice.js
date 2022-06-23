@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { actions as authorsActions } from './authorSlices.js';
+import { actions as authorsActions } from './authorsSlice.js';
 
 const postsAdapter = createEntityAdapter();
 const initialState = postsAdapter.getInitialState();

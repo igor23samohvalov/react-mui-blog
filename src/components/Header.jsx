@@ -8,8 +8,22 @@ import {
   Button,
 } from '@mui/material';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
+import { NavLink } from 'react-router-dom';
 
-const pages = ['Authors', 'Posts', 'Comments'];
+const pages = [
+  {
+    title: 'Authors',
+    link: 'authors',
+  },
+  {
+    title: 'Posts',
+    link: 'posts',
+  },
+  {
+    title: 'Comments',
+    link: 'comments',
+  },
+];
 
 function Header() {
   return (
@@ -20,8 +34,6 @@ function Header() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
             sx={{
               mr: 2,
               display: {  md: 'flex' },
@@ -32,15 +44,15 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            BLOG
+            <NavLink to="">BLOG</NavLink> 
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
-            {pages.map((page) => (
+          <Box sx={{ display: { md: 'flex' }, marginLeft: 'auto' }}>
+            {pages.map(({ link, title }) => (
               <Button
-                key={page}
+                key={title}
                 sx={{ color: 'white', display: 'block' }}
               >
-                {page}
+                <NavLink to={link}>{title}</NavLink>
               </Button>
             ))}
           </Box>

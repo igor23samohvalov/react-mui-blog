@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { actions as postsActions } from '../slices/postsSlice.js';
 import { actions as commentsActions } from '../slices/commentsSlice.js';
+import { actions as authorsActions } from '../slices/authorsSlice.js';
 import Header from './Header.jsx';
 
 
@@ -16,6 +17,9 @@ function Layout() {
     if (localStorage.getItem('comments')) {
       dispatch(commentsActions.addComments(JSON.parse(localStorage.getItem('comments'))));
     }
+    if (localStorage.getItem('authors')) {
+      dispatch(authorsActions.addAuthors(JSON.parse(localStorage.getItem('authors'))));
+    }
   }, [dispatch]);
 
   return (
@@ -23,9 +27,7 @@ function Layout() {
       <Grid item xs={12}>
         <Header />
       </Grid>
-      <Grid item xs={12} md={5}>
-        <Outlet />
-      </Grid>
+      <Outlet />
     </Grid>
   );
 }

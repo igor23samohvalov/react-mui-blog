@@ -3,7 +3,9 @@ import { useForm, Controller } from "react-hook-form";
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, TextField, Button, Typography } from '@mui/material';
 import { selector as postsSelector } from '../slices/postsSlice.js';
+import { selector as authorsSelector } from '../slices/authorsSlice.js';
 import { actions as postsActions } from '../slices/postsSlice.js';
+import { actions as authorsActions } from '../slices/authorsSlice.js';
 
 const errorPosts = {
   author: {
@@ -17,6 +19,10 @@ const errorPosts = {
   },
 }
 
+const isOldAuthor = (authors, newAuthor) => {
+  return authors.find(({ author }) => author === newAuthor);
+}
+
 function AddPost() {
   const dispatch = useDispatch();
   const {
@@ -28,7 +34,9 @@ function AddPost() {
   } = useForm();
 
   const posts = useSelector(postsSelector.selectAll);
+  const authors = useSelector(authorsSelector.selectAll);
   let lastPostId = posts[posts.length - 1]?.id ?? 0;
+  let lastAuthorId = authors[authors.length - 1]?.id ?? 0;
 
   const onSubmit = (values) => {
     const { picture, ...rest } = values;
@@ -37,8 +45,10 @@ function AddPost() {
     reader.readAsDataURL(picture[0]);
     reader.onload = () => {
       const newPost = { ...rest, id: lastPostId += 1, img: reader.result };
+      const newAuthor = { author: values.author, id: lastAuthorId + 1 };
     
       dispatch(postsActions.addPost(newPost))
+      dispatch(authorsActions.addAuthor(newAuthor))
       reset();
     
       if (localStorage.getItem('posts')) {
@@ -47,6 +57,19 @@ function AddPost() {
         localStorage.setItem('posts', JSON.stringify(tempPosts));
       } else {
         localStorage.setItem('posts', JSON.stringify([newPost]));
+      }
+
+      // TODO: one FN for every addToLocalStorage
+      if (!isOldAuthor(authors, values.author)) {
+        
+
+        if (localStorage.getItem('authors')) {
+          const tempAuthors = JSON.parse(localStorage.getItem('authors'));
+          tempAuthors.push(newAuthor);
+          localStorage.setItem('authors', JSON.stringify(tempAuthors));
+        } else {
+          localStorage.setItem('authors', JSON.stringify([newAuthor]));
+        }
       }
     }  
   }
