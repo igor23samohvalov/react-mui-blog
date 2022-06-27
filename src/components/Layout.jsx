@@ -23,7 +23,7 @@ function Layout() {
   }, [dispatch]);
 
   return (
-    <Grid container justifyContent="center" spacing={2}>
+    <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Header />
       </Grid>

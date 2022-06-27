@@ -30,7 +30,7 @@ function Header() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AllInboxIcon sx={{ display: { md: 'flex' }, mr: 1 }} />
+          <AllInboxIcon sx={{ display: { md: 'flex' }, mr: 1 }}/>
           <Typography
             variant="h6"
             noWrap
@@ -40,19 +40,19 @@ function Header() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              marginLeft: '8px',
               textDecoration: 'none',
             }}
           >
             <NavLink to="">BLOG</NavLink> 
           </Typography>
-          <Box sx={{ display: { md: 'flex' }, marginLeft: 'auto' }}>
+          <Box sx={{ display: { xs: 'flex' }, marginLeft: 'auto' }}>
             {pages.map(({ link, title }) => (
               <Button
                 key={title}
                 sx={{ color: 'white', display: 'block' }}
               >
-                <NavLink to={link}>{title}</NavLink>
+                <NavLink to={link} className="hover">{title}</NavLink>
               </Button>
             ))}
           </Box>

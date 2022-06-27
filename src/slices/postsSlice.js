@@ -13,9 +13,9 @@ const postsReducer = createSlice({
     removePost: postsAdapter.removeOne,
   },
   extraReducers: (builder) => {
-    builder.addCase(authorsActions.removeAuthor, (state, action) => {
+    builder.addCase(authorsActions.removeAuthor, (state, action) => { 
       const id = action.payload;
-      const restEntities = Object.values(state.entities).filter((e) => e.author !== id);
+      const restEntities = Object.values(state.entities).filter((e) => e.authorId !== id);
       postsAdapter.setAll(state, restEntities);
     });
   },

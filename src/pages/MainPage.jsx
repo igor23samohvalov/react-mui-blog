@@ -9,7 +9,7 @@ function MainPage() {
   const posts = useSelector(postsSelector.selectAll);
 
   return (
-    <Grid item xs={12} md={5}>
+    <Grid item xs={12} md={5} sx={{ px: { md: 0, xs: 1 }}}>
       <AddPost />
       {posts.slice(0).reverse().map((p) => <Post key={p.id} {...p} />)}
     </Grid>

@@ -44,11 +44,18 @@ function AddPost() {
     const reader = new FileReader();
     reader.readAsDataURL(picture[0]);
     reader.onload = () => {
-      const newPost = { ...rest, id: lastPostId += 1, img: reader.result };
-      const newAuthor = { author: values.author, id: lastAuthorId + 1 };
+      let authorId = authors.find(({author}) => author === rest.author)?.id ?? lastAuthorId + 1;
+
+      const newPost = {
+        ...rest,
+        id: lastPostId += 1,
+        authorId,
+        img: reader.result
+      };
+      
     
       dispatch(postsActions.addPost(newPost))
-      dispatch(authorsActions.addAuthor(newAuthor))
+      
       reset();
     
       if (localStorage.getItem('posts')) {
@@ -61,7 +68,8 @@ function AddPost() {
 
       // TODO: one FN for every addToLocalStorage
       if (!isOldAuthor(authors, values.author)) {
-        
+        const newAuthor = { author: values.author, id: authorId };
+        dispatch(authorsActions.addAuthor(newAuthor))
 
         if (localStorage.getItem('authors')) {
           const tempAuthors = JSON.parse(localStorage.getItem('authors'));
@@ -75,7 +83,7 @@ function AddPost() {
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ paddingTop: '16px' }}>
       <Typography
         variant="h5"
         component="div"

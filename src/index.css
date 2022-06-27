@@ -27,6 +27,28 @@ code {
   position: absolute;
 }
 
+.hover {
+  --s: 0.15em;   /* the thickness of the line */
+  --c: #fff; /* the color */
+  
+  color: #fff;
+  padding-bottom: 0.4em;
+  background: 
+    linear-gradient(90deg,var(--c) 50%,#000 0) calc(100% - var(--_p,0%))/200% 100%,
+    linear-gradient(var(--c) 0 0) 0% 100%/var(--_p,0%) var(--s) no-repeat;
+  -webkit-background-clip: text,padding-box;
+          background-clip: text,padding-box;
+  transition: 0.5s;
+}
+
+.active {
+  --_p: 100%
+}
+
+.hover:hover {
+  --_p: 100%
+}
+
 .file-input {
   display: flex;
 }
@@ -61,11 +83,12 @@ code {
               color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
+.pointer:hover {
+  cursor: pointer;
+}
+
 a {
   text-decoration: none;
   color: #fff;
 }
 
-.active {
-  font-weight: 700;
-}

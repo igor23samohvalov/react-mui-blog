@@ -10,7 +10,7 @@ function SingleComment() {
   const comment = useSelector((state) => commentsSelector.selectById(state, id));
 
   return (
-    <Grid item xs={12} md={5}>
+    <Grid item xs={12} md={5} sx={{ marginTop: 2 }}>
       <Comment {...comment} />
     </Grid>
   )

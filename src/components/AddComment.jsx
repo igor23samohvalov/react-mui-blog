@@ -4,6 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as commentsActions } from '../slices/commentsSlice.js';
 import { selector as commentsSelector } from '../slices/commentsSlice.js';
+import { selector as authorsSelector } from '../slices/authorsSlice.js';
+import { actions as authorsActions } from '../slices/authorsSlice.js';
 
 const errorComments = {
   author: {
@@ -12,7 +14,11 @@ const errorComments = {
   commentText: {
     required: 'The field is required',
   },
-}
+};
+
+const isOldAuthor = (authors, newAuthor) => {
+  return authors.find(({ author }) => author === newAuthor);
+};
 
 function AddComment({ postId, setAddComment, setComments }) {
   const dispatch = useDispatch();
@@ -28,9 +34,18 @@ function AddComment({ postId, setAddComment, setComments }) {
     reset
   } = useForm();
 
+  const authors = useSelector(authorsSelector.selectAll);
+  let lastAuthorId = authors[authors.length - 1]?.id ?? 0;
+
   const onSubmit = (values) => {
-    const newComment = { ...values, id: lastCommentId + 1, postId };
-  
+    let authorId = authors.find(({author}) => author === values.author)?.id ?? lastAuthorId + 1;
+    const newComment = {
+      ...values,
+      id: lastCommentId + 1,
+      postId,
+      authorId,
+    };
+    
     dispatch(commentsActions.addComment(newComment));
     reset();
 
@@ -42,6 +57,19 @@ function AddComment({ postId, setAddComment, setComments }) {
       localStorage.setItem('comments', JSON.stringify([newComment]));
     }
     
+    if (!isOldAuthor(authors, values.author)) {
+      const newAuthor = { author: values.author, id: authorId };
+      dispatch(authorsActions.addAuthor(newAuthor))
+
+      if (localStorage.getItem('authors')) {
+        const tempAuthors = JSON.parse(localStorage.getItem('authors'));
+        tempAuthors.push(newAuthor);
+        localStorage.setItem('authors', JSON.stringify(tempAuthors));
+      } else {
+        localStorage.setItem('authors', JSON.stringify([newAuthor]));
+      }
+    }
+
     setAddComment(false);
     setComments(true);
   }

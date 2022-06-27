@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Badge,
   Card,
   CardHeader,
   CardContent,
@@ -9,6 +10,7 @@ import {
   Collapse,
   CardMedia,
 } from '@mui/material';
+import ChatIcon from '@material-ui/icons/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as postsActions } from '../slices/postsSlice.js';
 import { selector as commentsSelector } from '../slices/commentsSlice.js';
@@ -36,8 +38,14 @@ function Post({ title, author, post, id, img }) {
   
     const posts = JSON.parse(localStorage.getItem('posts'));
     const newPosts = posts.filter((p) => p.id !== id);
+
+    const comments = JSON.parse(localStorage.getItem('comments'));
+    const newComments = comments.filter((c) => c.postId !== id);
+
     localStorage.setItem('posts', JSON.stringify(newPosts));
+    localStorage.setItem('comments', JSON.stringify(newComments));
   };
+
   const handleExpandClick = (e) => {
     switch (e.target.id) {
       case 'addComment':
@@ -81,7 +89,7 @@ function Post({ title, author, post, id, img }) {
           aria-expanded={isAddComment}
           aria-label="show more"
         >
-          Add Comment
+          Comment
         </Button>
         <Button
           size="small"
@@ -91,7 +99,9 @@ function Post({ title, author, post, id, img }) {
           aria-expanded={isComments}
           aria-label="show more"
         >
-          Show Comments {`(${commentsNum})`}
+          <Badge badgeContent={commentsNum} color="primary">
+            <ChatIcon color="primary" />
+          </Badge>
         </Button>
       </CardActions>
       <Collapse in={isAddComment} timeout="auto" unmountOnExit sx={{ width: 0.75 }}>
