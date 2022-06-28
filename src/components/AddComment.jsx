@@ -6,6 +6,7 @@ import { actions as commentsActions } from '../slices/commentsSlice.js';
 import { selector as commentsSelector } from '../slices/commentsSlice.js';
 import { selector as authorsSelector } from '../slices/authorsSlice.js';
 import { actions as authorsActions } from '../slices/authorsSlice.js';
+import localStore from '../utilityFns/localStore.js';
 
 const errorComments = {
   author: {
@@ -24,7 +25,7 @@ function AddComment({ postId, setAddComment, setComments }) {
   const dispatch = useDispatch();
   const commentsIds = useSelector((commentsSelector.selectIds))
   const lastCommentId = commentsIds.length === 0
-    ? 0
+    ? -1
     : commentsIds[commentsIds.length - 1];
 
   const {
@@ -35,7 +36,7 @@ function AddComment({ postId, setAddComment, setComments }) {
   } = useForm();
 
   const authors = useSelector(authorsSelector.selectAll);
-  let lastAuthorId = authors[authors.length - 1]?.id ?? 0;
+  let lastAuthorId = authors[authors.length - 1]?.id ?? -1;
 
   const onSubmit = (values) => {
     let authorId = authors.find(({author}) => author === values.author)?.id ?? lastAuthorId + 1;
@@ -49,25 +50,13 @@ function AddComment({ postId, setAddComment, setComments }) {
     dispatch(commentsActions.addComment(newComment));
     reset();
 
-    if (localStorage.getItem('comments')) {
-      const tempComments = JSON.parse(localStorage.getItem('comments'));
-      tempComments.push(newComment);
-      localStorage.setItem('comments', JSON.stringify(tempComments));
-    } else {
-      localStorage.setItem('comments', JSON.stringify([newComment]));
-    }
+    localStore['update']('comments', newComment);
     
     if (!isOldAuthor(authors, values.author)) {
       const newAuthor = { author: values.author, id: authorId };
       dispatch(authorsActions.addAuthor(newAuthor))
 
-      if (localStorage.getItem('authors')) {
-        const tempAuthors = JSON.parse(localStorage.getItem('authors'));
-        tempAuthors.push(newAuthor);
-        localStorage.setItem('authors', JSON.stringify(tempAuthors));
-      } else {
-        localStorage.setItem('authors', JSON.stringify([newAuthor]));
-      }
+      localStore['update']('authors', newAuthor);
     }
 
     setAddComment(false);

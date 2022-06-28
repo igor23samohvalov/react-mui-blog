@@ -6,6 +6,7 @@ import { selector as postsSelector } from '../slices/postsSlice.js';
 import { selector as authorsSelector } from '../slices/authorsSlice.js';
 import { actions as postsActions } from '../slices/postsSlice.js';
 import { actions as authorsActions } from '../slices/authorsSlice.js';
+import localStore from '../utilityFns/localStore.js';
 
 const errorPosts = {
   author: {
@@ -35,8 +36,8 @@ function AddPost() {
 
   const posts = useSelector(postsSelector.selectAll);
   const authors = useSelector(authorsSelector.selectAll);
-  let lastPostId = posts[posts.length - 1]?.id ?? 0;
-  let lastAuthorId = authors[authors.length - 1]?.id ?? 0;
+  let lastPostId = posts[posts.length - 1]?.id ?? -1;
+  let lastAuthorId = authors[authors.length - 1]?.id ?? -1;
 
   const onSubmit = (values) => {
     const { picture, ...rest } = values;
@@ -55,29 +56,15 @@ function AddPost() {
       
     
       dispatch(postsActions.addPost(newPost))
-      
       reset();
     
-      if (localStorage.getItem('posts')) {
-        const tempPosts = JSON.parse(localStorage.getItem('posts'));
-        tempPosts.push(newPost);
-        localStorage.setItem('posts', JSON.stringify(tempPosts));
-      } else {
-        localStorage.setItem('posts', JSON.stringify([newPost]));
-      }
+      localStore['update']('posts', newPost);
 
-      // TODO: one FN for every addToLocalStorage
       if (!isOldAuthor(authors, values.author)) {
         const newAuthor = { author: values.author, id: authorId };
         dispatch(authorsActions.addAuthor(newAuthor))
 
-        if (localStorage.getItem('authors')) {
-          const tempAuthors = JSON.parse(localStorage.getItem('authors'));
-          tempAuthors.push(newAuthor);
-          localStorage.setItem('authors', JSON.stringify(tempAuthors));
-        } else {
-          localStorage.setItem('authors', JSON.stringify([newAuthor]));
-        }
+        localStore['update']('authors', newAuthor);
       }
     }  
   }

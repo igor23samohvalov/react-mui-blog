@@ -16,6 +16,7 @@ import { actions as postsActions } from '../slices/postsSlice.js';
 import { selector as commentsSelector } from '../slices/commentsSlice.js';
 import AddComment from './AddComment.jsx';
 import Comment from './Comment.jsx';
+import localStore from '../utilityFns/localStore.js';
 
 
 function Post({ title, author, post, id, img }) {
@@ -36,14 +37,8 @@ function Post({ title, author, post, id, img }) {
   const handleRemove = () => {
     dispatch(postsActions.removePost(id));
   
-    const posts = JSON.parse(localStorage.getItem('posts'));
-    const newPosts = posts.filter((p) => p.id !== id);
-
-    const comments = JSON.parse(localStorage.getItem('comments'));
-    const newComments = comments.filter((c) => c.postId !== id);
-
-    localStorage.setItem('posts', JSON.stringify(newPosts));
-    localStorage.setItem('comments', JSON.stringify(newComments));
+    localStore['remove']('posts', id, 'id');
+    localStore['remove']('comments', id, 'postId');
   };
 
   const handleExpandClick = (e) => {
@@ -61,7 +56,7 @@ function Post({ title, author, post, id, img }) {
   };
 
   return (
-    <Card sx={{ width: 1, my: 2 }} elevation={6}>
+    <Card sx={{ width: 1, my: 2  }} elevation={6}>
       <CardHeader 
         title={title}
         subheader={`by ${author}`}

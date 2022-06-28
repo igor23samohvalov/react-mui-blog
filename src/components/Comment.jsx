@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { actions as commentsActions } from '../slices/commentsSlice.js';
+import localStore from '../utilityFns/localStore.js';
 
 
 function Comment({ author, commentText, id }) {
@@ -17,9 +18,7 @@ function Comment({ author, commentText, id }) {
   const handleRemove = () => {
     dispatch(commentsActions.removeComment(id));
 
-    const comments = JSON.parse(localStorage.getItem('comments'));
-    const newComments = comments.filter((c) => c.id !== id);
-    localStorage.setItem('comments', JSON.stringify(newComments));
+    localStore['remove']('comments', id, 'id');
   };
 
   return (
