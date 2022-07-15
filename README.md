@@ -5,5 +5,5 @@ A study project built on React for some practice (mostly to look for dynamic rou
  - React Hook Form
  - Material UI
 
-Backend is being imitiated by LocalStorage.
+All the changes are being stored into LocalStorage.
 Vercel: https://react-mui-blog-six.vercel.app/
